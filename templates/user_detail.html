@@ -1,0 +1,20 @@
+{% extends 'pattern.html' %}
+{% block title %}
+{{ user.title }}
+{% endblock %}
+
+{% block body %}
+<h1>
+    {{ user.name }} </h1>
+<p>
+    <b>Дата регистрации:</b>    {{ user.date.date() }} <br>
+    <b>Имя участника:</b>       {{ user.name }} <br>
+    <b>Тема доклада:</b>        {{ user.theme }} <br>
+    <b>Организация:</b>         {{ user.organization }} <br>
+    <b>Телефон:</b>             {{ user.phone }} <br>
+    <b>E-mail:</b>              {{ user.mail }} <br>
+    <b>Комментарий</b>          {{ user.comment }}
+</p>
+
+
+{% endblock %}

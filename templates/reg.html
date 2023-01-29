@@ -1,0 +1,24 @@
+{% extends 'pattern.html' %}
+{% block title %}
+Регистрация нового пользователя
+{% endblock %}
+
+{% block body %}
+<h4>
+    Для регистрации заполните необходимые поля
+</h4>
+
+<div>
+    <form method="post">
+        <input type="text" name="name" id="name" placeholder="Введите ФИО"> * <br>
+        <input type="text" name="theme" id="theme" placeholder="Тема доклада"> * <br>
+        <input type="text" name="organization" id="organization" placeholder="Название организации"><br>
+        <input type="number" name="phone" id="phone" placeholder="Номер телефона для связи"><br>
+        <input type="text" name="mail" id="mail" placeholder="E-mail"> * <br>
+        <textarea name="comment" id="comment" placeholder="Комментарий"></textarea> <br>
+        <input type="submit" value="Отправить">
+    </form>
+</div>
+
+
+{% endblock %}
