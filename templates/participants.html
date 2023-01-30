@@ -1,18 +1,18 @@
 {% extends 'pattern.html' %}
 {% block title %}
-Панель администратора
+Список зарегистрированных участников
 {% endblock %}
 
 {% block body %}
 {% for el in users %}
 <div>
 <h2>
+
     {{el.date.date()}}
     {{el.name}}
     {{el.organization}}
 </h2>
 
-<a href="/admin/{{ el.id }}">подробнее</a>
 </div>
 {% endfor %}
 {% endblock %}

@@ -29,15 +29,22 @@ def index():
     return render_template('index.html')
 
 
+@site.route('/admin')
+def admin():
+    users = Participants.query.order_by(Participants.date.desc()).all()
+    return render_template("admin.html", users=users)
+
+
+
 @site.route('/contact')
 def contact():
     return render_template('contact.html')
 
 
-@site.route('/admin')
-def admin():
+@site.route('/participants')
+def participants_list():
     users = Participants.query.order_by(Participants.date.desc()).all()
-    return render_template("admin.html", users=users)
+    return render_template("participants.html", users=users)
 
 
 @site.route('/admin/<int:id>')
@@ -71,12 +78,13 @@ def reg():
             else:
                 comment = request.form['comment']
 
-            participants = Participants(name=name, theme=theme, organization=organization, phone=phone, mail=mail, comment=comment)
+            participants = Participants(name=name, theme=theme, organization=organization, phone=phone, mail=mail,
+                                        comment=comment)
 
             try:
                 db.session.add(participants)
                 db.session.commit()
-                return redirect('/')
+                return redirect('participants')
             except:
                 return "Регистрация не удалась, во время регистрации произошла ошибка"
 
