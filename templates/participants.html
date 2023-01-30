@@ -1,17 +1,18 @@
 {% extends 'pattern.html' %}
 {% block title %}
-Панель администратора
+Все участники конференции
 {% endblock %}
 
 {% block body %}
 {% for el in users %}
 <div>
 <h2>
+    {{el.date.date()}} -
     {{el.name}}
-    {{el.date.date()}}
+    {{el.organization}}
 </h2>
 
-<a href="/admin/{{ el.id }}">подробнее</a>
+<a href="/participants/{{ el.id }}">подробнее</a>
 </div>
 {% endfor %}
 {% endblock %}

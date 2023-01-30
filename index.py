@@ -34,13 +34,13 @@ def contact():
     return render_template('contact.html')
 
 
-@site.route('/admin')
+@site.route('/participants')
 def admin():
     users = Participants.query.order_by(Participants.date.desc()).all()
-    return render_template("admin.html", users=users)
+    return render_template("participants.html", users=users)
 
 
-@site.route('/admin/<int:id>')
+@site.route('/participants/<int:id>')
 def user_detail(id):
     user = Participants.query.get(id)
     return render_template("user_detail.html", user=user)
@@ -76,7 +76,7 @@ def reg():
             try:
                 db.session.add(participants)
                 db.session.commit()
-                return redirect('/')
+                return redirect('participants')
             except:
                 return "Регистрация не удалась, во время регистрации произошла ошибка"
 
