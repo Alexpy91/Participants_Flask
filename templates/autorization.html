@@ -1,0 +1,20 @@
+{% extends 'pattern.html' %}
+{% block title %}
+Вход на сайт
+{% endblock %}
+
+{% block body %}
+<h4>
+    Введите логин и авроль для входа
+</h4>
+
+<div>
+    <form method="post">
+        <input type="text" name="login" id="login" placeholder="Введите логин"> * <br>
+        <input type="password" name="password" id="password" placeholder="Пароль"> * <br>
+        <input type="submit" value="Войти">
+    </form>
+</div>
+
+
+{% endblock %}

@@ -34,16 +34,52 @@ def contact():
     return render_template('contact.html')
 
 
+
+
 @site.route('/participants')
-def admin():
+def participants_list():
     users = Participants.query.order_by(Participants.date.desc()).all()
     return render_template("participants.html", users=users)
 
 
-@site.route('/participants/<int:id>')
+@site.route('/admin/<int:id>')
 def user_detail(id):
     user = Participants.query.get(id)
     return render_template("user_detail.html", user=user)
+
+
+@site.route('/admin/<int:id>/delete')                             #delete
+def user_delete(id):
+    user = Participants.query.get_or_404(id)
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return "Пользователь успешно удален"
+
+
+        #redirect('/participants')   нужно обновление страницы
+
+    except:
+        return "При удалении пользователя произошла ошибка"
+
+
+@site.route('/autorization', methods=['POST', 'GET'])
+def autorization():
+    if request.method == "POST":
+        if request.form['login'] == 'admin' and request.form['password'] == '1234':
+            users = Participants.query.order_by(Participants.date.desc()).all()
+            return render_template("admin.html", users=users)
+
+        elif request.form['login'] == '':
+            return "Поле логин не заполнено"
+        elif request.form['password'] == '':
+            return "Поле пароль не заполнено"
+        else:
+            return "Ошибка логин или пароль не верны"
+    else:
+        return render_template('autorization.html')
+
+
 
 
 @site.route('/reg', methods=['POST', 'GET'])
@@ -82,6 +118,45 @@ def reg():
 
     else:
         return render_template('reg.html')
+
+
+
+@site.route('/admin/<int:id>/update', methods=['POST', 'GET'])
+def user_update(id):
+    user = Participants.query.get(id)
+    if request.method == "POST":
+        if request.form['name'] == '' or request.form['theme'] == '' or request.form['mail'] == '':
+            return "Вы не запонили обязательные поля для регистрации"
+        else:
+            user.name = request.form['name']
+            user.theme = request.form['theme']
+            user.mail = request.form['mail']
+
+            if request.form['organization'] == '':
+                user.organization = 'Данные не заполнены'
+            else:
+                user.organization = request.form['organization']
+
+            if request.form['phone'] == '':
+                user.phone = 'Данные не заполнены'
+            else:
+                user.phone = request.form['phone']
+
+            if request.form['comment'] == '':
+                user.comment = 'Данные не заполнены'
+            else:
+                user.comment = request.form['comment']
+
+            try:
+                db.session.commit()
+                return redirect('/participants')
+            except:
+                return "Ошибка. Не удалось изменить данные пользователя"
+
+    else:
+
+        return render_template('create_user.html', user=user)
+
 
 
 if __name__ == '__main__':
