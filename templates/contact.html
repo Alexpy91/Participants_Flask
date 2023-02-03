@@ -4,10 +4,38 @@
 {% endblock %}
 
 {% block body %}
-<h1>
-    I am Alex </h1>
+
 <h2>
-I am student
+Контактная информация:
 </h2>
+
+<p>
+    <b>Руководитель научной секции:</b><br>
+    Иванов Иван Иванович<br>
+    <b>Телефон:</b> 8-800-200-23-23<br>
+    <b>E-mail:</b> konferense@gmail.com<br>
+
+    <b>Адрес:</b> г. Иркутск Лермонтова, 83
+    Иркутский Национально-исследовательский университет
+</p>
+
+
+<div>
+
+
+
+    <br>
+    <h3>Форма обратной связи</h3>
+
+    {% for cat, msg in get_flashed_messages(True) %}
+    <div class="flash {{cat}}">{{msg}}</div>
+    {% endfor %}
+
+    <form method="post">
+        <input type="text" name="username" id="username" placeholder="Ваше имя"> * <br>
+        <textarea  name="message"   placeholder="Сообщение"> </textarea> * <br>
+        <input type="submit" value="Отправить">
+    </form>
+</div>
 
 {% endblock %}

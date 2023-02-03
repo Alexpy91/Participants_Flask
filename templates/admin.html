@@ -1,0 +1,20 @@
+
+{% extends 'pattern.html' %}
+{% block title %}
+Все участники конференции
+{% endblock %}
+
+{% block body %}
+{% for el in users %}
+<div>
+<h4>
+    {{el.date.date()}} -
+    {{el.name}}
+    {{el.organization}}
+</h4>
+    <a class="button_change" href="/admin/{{ el.id }}">Подробнее</a>
+    <a class="button_delete" href="/admin/{{ el.id }}/delete">Удалить</a>
+
+</div>
+{% endfor %}
+{% endblock %}

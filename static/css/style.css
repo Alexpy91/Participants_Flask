@@ -93,7 +93,7 @@ header h1 {
   background-color: rgb(255, 0, 8);
 }
 
-input[type=text],input[type=number] {
+input[type=text],input[type=number], input[type=password] {
     width: 400px;
     padding: 10px 15px;
     margin: 6px 0;
@@ -115,7 +115,7 @@ textarea {
     resize: none;
 }
 
-input[type=button], input[type=submit], input[type=reset] {
+input[type=button], input[type=submit], input[type=reset], input[type=password] {
     background-color: #4CAF50;
     border: none;
     color: white;
@@ -124,3 +124,64 @@ input[type=button], input[type=submit], input[type=reset] {
     margin: 4px 2px;
     cursor: pointer;
 }
+
+.button_update {
+text-decoration: none;
+  color: rgb(241, 242, 244);
+  background-color: DeepSkyBlue;
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid;
+  position: relative;
+  z-index: 0;
+  border-radius: 6px;
+  margin:0 5px 5px 0;
+  cursor: pointer;
+  margin-top: 2;
+
+
+}
+
+.button_change {
+text-decoration: none;
+  color: rgb(241, 242, 244);
+  background-color: DarkOrange;
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid;
+  position: relative;
+  z-index: 0;
+  border-radius: 6px;
+  margin:0 5px 5px 0;
+  cursor: pointer;
+  margin-top: 2;
+  }
+
+  .button_delete {
+text-decoration: none;
+  color: rgb(241, 242, 244);
+  background-color: Crimson;
+  display: inline-block;
+  padding: 6px 12px;
+  border: 1px solid;
+  position: relative;
+  z-index: 0;
+  border-radius: 6px;
+  margin:0 5px 5px 0;
+  cursor: pointer;
+  margin-top: 2;
+  }
+
+  .flash{
+  padding:10px;
+
+  }
+  .flash.success{
+  border:1px solid #21DB56;
+  background: #AEFFC5;
+  }
+
+    .flash.error{
+  border:1px solid #21DB56;
+  background: #FF9C9C;
+  }
