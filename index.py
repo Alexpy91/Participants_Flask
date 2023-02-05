@@ -118,9 +118,11 @@ def reg():
 
             participants = Participants(name=name, theme=theme, organization=organization, phone=phone, mail=mail,
                                         comment=comment)
-            if not Participants.query.filter(Participants.name == name) or name == "Hello":
-                flash("Такой рользователь уже зарегистрирован!", category='error')
 
+            ##код ниже  не отрабатывает проверка что такое имя польщзователя уже есть в базе
+
+            if not Participants.query.filter(Participants.name == name) or name == "Hello":   #второе условие для проверки
+                flash("Такой рользователь уже зарегистрирован!", category='error')
 
 
             else:
