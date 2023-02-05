@@ -1,18 +1,26 @@
 {% extends 'pattern.html' %}
 {% block title %}
-Список зарегистрированных участников
+Все участники конференции
 {% endblock %}
 
 {% block body %}
-{% for el in users %}
+<h3>
+Список зарегистрированных участников:
+</h3>
 <div>
-<h2>
 
-    {{el.date.date()}}
-    {{el.name}}
-    {{el.organization}}
-</h2>
 
+{% if users|length > 0 %}
+    {% for el in users %}
+    {{el.date.date()}} -
+    <b> {{el.name}} </b>
+    {{el.organization}} <br><br>
+    {% endfor %}
+{% else %}
+    <p>
+        Еще нет зарегистрированных пользователей. Станьте первым!
+    </p>
+{% endif %}
 </div>
-{% endfor %}
+
 {% endblock %}

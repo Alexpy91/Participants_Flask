@@ -1,0 +1,24 @@
+{% extends 'pattern.html' %}
+{% block title %}
+Изменение данных пользователя
+{% endblock %}
+
+{% block body %}
+<h4>
+    Для изменения внесите новые данные
+</h4>
+
+<div>
+    <form method="post">
+        <input type="text" name="name" id="name" value="{{ user.name }}" placeholder="Введите ФИО"> * <br>
+        <input type="text" name="theme" id="theme" value="{{ user.theme }}" placeholder="Тема доклада"> * <br>
+        <input type="text" name="organization" id="organization" value="{{ user.organization }}" placeholder="Название организации"><br>
+        <input type="number" name="phone" id="phone" value="{{ user.phone }}" placeholder="Номер телефона для связи"><br>
+        <input type="text" name="mail" id="mail" value="{{ user.mail }}" placeholder="E-mail"> * <br>
+        <textarea name="comment" id="comment"  placeholder="Комментарий">{{ user.comment }}</textarea> <br>
+        <input type="submit" value="Сохранить">
+    </form>
+</div>
+
+
+{% endblock %}

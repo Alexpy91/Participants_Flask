@@ -1,8 +1,10 @@
-from flask import Flask, request, redirect, render_template
+from flask import Flask, request, redirect, render_template, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
 from datetime import datetime
 
 site = Flask(__name__)
+
+site.config['SECRET_KEY'] = 'gsghsfuseufhseukfilhsbaf'
 
 site.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///participants.bd'
 site.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -29,15 +31,15 @@ def index():
     return render_template('index.html')
 
 
-@site.route('/admin')
-def admin():
-    users = Participants.query.order_by(Participants.date.desc()).all()
-    return render_template("admin.html", users=users)
-
-
-
-@site.route('/contact')
+@site.route('/contact', methods=['POST', 'GET'])
 def contact():
+    if request.method == 'POST':
+        if request.form['username'] != '' and request.form['message'] != ' ':
+            print(request.form['username'])
+            flash("Данные отправлены успешно!", category='success')
+        else:
+            flash("Ошибка заполните необходимые данные!", category='error')
+
     return render_template('contact.html')
 
 
@@ -47,17 +49,53 @@ def participants_list():
     return render_template("participants.html", users=users)
 
 
+@site.route('/admin')
+def admin():
+    users = Participants.query.order_by(Participants.date.desc()).all()
+    return render_template("admin.html", users=users)
+
+
 @site.route('/admin/<int:id>')
 def user_detail(id):
     user = Participants.query.get(id)
     return render_template("user_detail.html", user=user)
 
 
+@site.route('/admin/<int:id>/delete')  # delete
+def user_delete(id):
+    user = Participants.query.get_or_404(id)
+    try:
+        db.session.delete(user)
+        db.session.commit()
+        return redirect('/admin')
+    except:
+        return "При удалении пользователя произошла ошибка"
+
+
+@site.route('/autorization', methods=['POST', 'GET'])
+def autorization():
+    if request.method == "POST":
+        if request.form['login'] == '' and request.form['password'] == '':
+            users = Participants.query.order_by(Participants.date.desc()).all()
+            return render_template("admin.html", users=users)
+
+        elif request.form['login'] == '':
+            return "Поле логин не заполнено"
+
+        elif request.form['password'] == '':
+            return "Поле пароль не заполнено"
+        else:
+            return "Ошибка логин или пароль не верны"
+
+    else:
+        return render_template('autorization.html')
+
+
 @site.route('/reg', methods=['POST', 'GET'])
 def reg():
     if request.method == "POST":
         if request.form['name'] == '' or request.form['theme'] == '' or request.form['mail'] == '':
-            return "Вы не запонили обязательные поля для регистрации"
+            flash("Вы не заполнили обязательные поля для регистрации!", category='error')
         else:
             name = request.form['name']
             theme = request.form['theme']
@@ -80,16 +118,57 @@ def reg():
 
             participants = Participants(name=name, theme=theme, organization=organization, phone=phone, mail=mail,
                                         comment=comment)
+            if not Participants.query.filter(Participants.name == name) or name == "Hello":
+                flash("Такой рользователь уже зарегистрирован!", category='error')
+
+
+
+            else:
+                try:
+                    db.session.add(participants)
+                    db.session.commit()
+                    flash("Регистрация прошла успешно!", category='success')
+                except:
+                    flash("Регистрация не удалась, во время регистрации произошла ошибка!", category='error')
+
+    return render_template('reg.html')
+
+
+@site.route('/admin/<int:id>/update', methods=['POST', 'GET'])
+def user_update(id):
+    user = Participants.query.get(id)
+    if request.method == "POST":
+        if request.form['name'] == '' or request.form['theme'] == '' or request.form['mail'] == '':
+            return "Вы не запонили обязательные поля для регистрации"
+        else:
+            user.name = request.form['name']
+            user.theme = request.form['theme']
+            user.mail = request.form['mail']
+
+            if request.form['organization'] == '':
+                user.organization = 'Данные не заполнены'
+            else:
+                user.organization = request.form['organization']
+
+            if request.form['phone'] == '':
+                user.phone = 'Данные не заполнены'
+            else:
+                user.phone = request.form['phone']
+
+            if request.form['comment'] == '':
+                user.comment = 'Данные не заполнены'
+            else:
+                user.comment = request.form['comment']
 
             try:
-                db.session.add(participants)
                 db.session.commit()
-                return redirect('participants')
+                return redirect('/participants')
             except:
-                return "Регистрация не удалась, во время регистрации произошла ошибка"
+                return "Ошибка. Не удалось изменить данные пользователя"
 
     else:
-        return render_template('reg.html')
+
+        return render_template('create_user.html', user=user)
 
 
 if __name__ == '__main__':
