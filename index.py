@@ -11,7 +11,6 @@ site.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(site)
 
-
 class Participants(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -24,7 +23,6 @@ class Participants(db.Model):
 
     def __repr__(self):
         return '<Participants %r>' % self.id
-
 
 @site.route('/')
 def index():
@@ -95,7 +93,7 @@ def autorization():
 def reg():
     if request.method == "POST":
         if request.form['name'] == '' or request.form['theme'] == '' or request.form['mail'] == '':
-            flash("Вы не заполнили обязательные поля для регистрации!", category='error')
+            return "Вы не запонили обязательные поля для регистрации"
         else:
             name = request.form['name']
             theme = request.form['theme']
@@ -116,24 +114,23 @@ def reg():
             else:
                 comment = request.form['comment']
 
+
             participants = Participants(name=name, theme=theme, organization=organization, phone=phone, mail=mail,
                                         comment=comment)
+            users = Participants.query.order_by(Participants.date.desc()).all()
+            for el in users:
+                if el.name == name or el.mail == mail or el.phone == phone:
+                    return "Такой пользователь уже зарегистрирован"
 
-            ##код ниже  не отрабатывает проверка что такое имя польщзователя уже есть в базе
+            try:
+                db.session.add(participants)
+                db.session.commit()
+                return redirect('participants')
+            except:
+                return "Регистрация не удалась, во время регистрации произошла ошибка"
 
-            if not Participants.query.filter(Participants.name == name) or name == "Hello":   #второе условие для проверки
-                flash("Такой рользователь уже зарегистрирован!", category='error')
-
-
-            else:
-                try:
-                    db.session.add(participants)
-                    db.session.commit()
-                    flash("Регистрация прошла успешно!", category='success')
-                except:
-                    flash("Регистрация не удалась, во время регистрации произошла ошибка!", category='error')
-
-    return render_template('reg.html')
+    else:
+        return render_template('reg.html')
 
 
 @site.route('/admin/<int:id>/update', methods=['POST', 'GET'])
@@ -164,7 +161,8 @@ def user_update(id):
 
             try:
                 db.session.commit()
-                return redirect('/participants')
+                return redirect('/admin')
+
             except:
                 return "Ошибка. Не удалось изменить данные пользователя"
 
